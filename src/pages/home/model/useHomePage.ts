@@ -3,6 +3,7 @@ import type { Artwork, ArtworkConfig } from '@shared/lib/types'
 import { useCallback, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { DEFAULT_CONFIG } from '../lib/constants'
+import { getRandomPosition } from '../lib/getRandomPosition'
 import type { MobileTab } from '../lib/types'
 
 export const useHomePage = () => {
@@ -12,22 +13,30 @@ export const useHomePage = () => {
 
   const handleImagesSelected = useCallback(
     (files: File[]) => {
-      const newArtworks: Artwork[] = files
-        .slice(0, 3 - artworks.length)
-        .map((file, index) => ({
+      const filesToAdd = files.slice(0, 3 - artworks.length)
+      const newArtworks: Artwork[] = []
+
+      filesToAdd.forEach(file => {
+        const position = getRandomPosition(
+          [...artworks, ...newArtworks],
+          DEFAULT_CONFIG.size
+        )
+
+        newArtworks.push({
           id: uuidv4(),
           file,
           url: URL.createObjectURL(file),
-          position: { x: 100 + index * 180, y: 80 },
+          position,
           config: { ...DEFAULT_CONFIG },
-        }))
+        })
+      })
 
       setArtworks(prev => [...prev, ...newArtworks].slice(0, 3))
       if (newArtworks.length > 0 && !activeId) {
         setActiveId(newArtworks[0].id)
       }
     },
-    [artworks.length, activeId]
+    [artworks, activeId]
   )
 
   const handlePositionChange = useCallback(
