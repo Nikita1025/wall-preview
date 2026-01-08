@@ -1,8 +1,8 @@
 import type { Artwork } from '@shared/lib/types'
+import { getFrameSize } from '@shared/lib/getFrameSize'
 import { cn } from '@shared/lib/utils'
 import { getBorderSize } from '../lib/getBorderSize'
 import { getEffectStyles } from '../lib/getEffectStyles'
-import { getFrameSize } from '../lib/getFrameSize'
 import { getFrameStyles } from '../lib/getFrameStyles'
 import { useArtworkFrame } from '../model/useArtworkFrame'
 

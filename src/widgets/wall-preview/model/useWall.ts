@@ -1,5 +1,5 @@
+import { getFrameSize } from '@shared/lib/getFrameSize'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getFrameSize } from '../lib/getFrameSize'
 import type { UseWallProps } from '../lib/types'
 
 export const useWall = ({

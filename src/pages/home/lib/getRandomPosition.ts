@@ -1,5 +1,5 @@
+import { getFrameSize } from '@shared/lib/getFrameSize'
 import type { Artwork } from '@shared/lib/types'
-import { getFrameSize } from '@widgets/wall-preview/lib/getFrameSize'
 
 const baseWallWidth = 800
 const baseWallWidthRem = baseWallWidth / 16

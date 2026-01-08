@@ -3,6 +3,7 @@ import type { Artwork, ArtworkConfig } from '@shared/lib/types'
 import { useCallback, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { DEFAULT_CONFIG } from '../lib/constants'
+import { constrainPosition } from '../lib/constrainPosition'
 import { getRandomPosition } from '../lib/getRandomPosition'
 import type { MobileTab } from '../lib/types'
 
@@ -52,11 +53,25 @@ export const useHomePage = () => {
     (config: Partial<ArtworkConfig>) => {
       if (!activeId) return
       setArtworks(prev =>
-        prev.map(art =>
-          art.id === activeId
-            ? { ...art, config: { ...art.config, ...config } }
-            : art
-        )
+        prev.map(art => {
+          if (art.id !== activeId) return art
+
+          const newConfig = { ...art.config, ...config }
+
+          if (config.size && config.size !== art.config.size) {
+            const constrainedPosition = constrainPosition(
+              art.position,
+              newConfig.size
+            )
+            return {
+              ...art,
+              config: newConfig,
+              position: constrainedPosition,
+            }
+          }
+
+          return { ...art, config: newConfig }
+        })
       )
     },
     [activeId]
